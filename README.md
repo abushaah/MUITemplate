@@ -1,3 +1,3 @@
 # MUI-Template
 
-Website template developed with Material UI & Vite.js
+Website template developed with React Material UI & Vite.js
