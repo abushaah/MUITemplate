@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Box, Drawer, Toolbar, Typography, IconButton, Divider } from '@mui/Material';
+import { Box, Drawer, Toolbar, Typography, IconButton, Divider } from '@mui/material';
 import DefaultAppBar from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
-import NarbarTreeView from './components/NavbarTreeView';
-import routes from './routes';
+import NarbarTreeView from '../src/components/NavbarTreeView';
+import routes from '../routes';
 
 const drawerWidth = 300;
 
@@ -76,7 +76,7 @@ export default function AppLayout({ children }) {
                         color='inherit'
                         aria-label='open-drawer'
                         onClick={handleDrawerOpen}
-                        egde="start"
+                        edge="start"
                         sx={{ mr: 2, ...(open && { display: 'none' }) }}
                     >
                         <MenuIcon />
@@ -105,7 +105,7 @@ export default function AppLayout({ children }) {
                     <Typography variant='h6' color='white' noWrap>
                         MUI-Dashboard
                     </Typography>
-                    <IconButton onLick={handleDrawerClose}>
+                    <IconButton onClick={handleDrawerClose}>
                         {<ChevronLeftIcon color='secondary' />}
                     </IconButton>
                 </DrawerHeader>

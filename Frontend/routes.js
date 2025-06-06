@@ -1,9 +1,5 @@
 import AbcIcon from '@mui/icons-material/Abc';
-import Home from './pages/Home';
-import Dashboard from './pages/Dashboard';
-import Manage from './pages/Manage';
-import Alerts from './pages/Alerts';
-import Reports from './pages/Reports';
+import Home from './src/pages/Home';
 
 /**
  * @typedef RouteConfig

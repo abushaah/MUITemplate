@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { styled, useTheme } from '@mui/matrial/styles';
-import { Box, Typography } from '@mui/Matrial';
-import { TreeView } from '@mui/x-tree-view/TreeView';
-import { TreeItem, treeItemClasses } from '@mui/x-tree-view/TreeItem';
+import { styled, useTheme } from '@mui/material/styles';
+import { Box, Typography } from '@mui/material';
+import { SimpleTreeView, TreeItem, treeItemClasses } from '@mui/x-tree-view';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChavronRightIcon from '@mui/icons-material/ChevronRight';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import PropTypes from 'prop-types';
-import routes from '../routes';
+import routes from '../../routes';
 
 const LinkedTreeItemRoot = styled(TreeItem)(({ theme }) => ({
     color: theme.palette.text.secondary,
@@ -42,16 +41,18 @@ function LinkedTreeItem(props) {
         color,
         labelIcon,
         labelInfo,
-        labekText,
+        labelText,
         colorForDarkMode,
         bgColorForDarkMode,
         to,
+        collapseIcon,
+        expandIcon,
         ...other
     } = props;
 
     const styleProps = {
-        'tree-view-color': theme.palette.mode !== 'dark' ? color : colorForDarkMode,
-        'tree-view-bg-color': theme.palette.mode !== 'dark' ? bgColor : bgColorForDarkMode,
+        'treeViewColor': theme.palette.mode !== 'dark' ? color : colorForDarkMode,
+        'treeViewBgColor': theme.palette.mode !== 'dark' ? bgColor : bgColorForDarkMode,
     };
 
     return (
@@ -96,19 +97,23 @@ LinkedTreeItem.propTypes = {
 export default function NavbarTreeView () {
     const theme = useTheme();
     return (
-        <TreeView
+        <SimpleTreeView
             aria-label="navbar"
-            defaultExpanded={['3']}
-            defaultCollapseIcon={<ExpandMoreIcon style={{ fill: theme.palette.navbar.main }} />}
-            defaulExpandIcon={<ChavronRightIcon style={{ fill: theme.palette.navbar.main }} />}
+            defaultExpandedItems={['3']}
             sx={{ overflowY: 'auto '}}
         >
             {routes.map(({ path, name, Icon, nestedRoutes }) => (
-                <LinkedTreeItem key={name} nodeId={name} labelText={name} labelIcon={Icon} to={path}>
+                <LinkedTreeItem
+                    key={name}
+                    labelText={name}
+                    labelIcon={Icon}
+                    to={path}
+                    collapseIcon={<ExpandMoreIcon style={{ fill: theme.palette.navbar.main }} />}
+                    expandIcon={<ChevronRightIcon style={{ fill: theme.palette.navbar.main }} />}
+                >
                     {nestedRoutes?.map((nestedRoute) => (
                         <LinkedTreeItem
                             key={nestedRoute.name}
-                            nodeId={nestedRoute.name}
                             labelText={nestedRoute.name}
                             labelIcon={nestedRoute.Icon}
                             to={nestedRoute.path}
@@ -117,6 +122,6 @@ export default function NavbarTreeView () {
                     ))}
                 </LinkedTreeItem>
             ))}
-        </TreeView>
+        </SimpleTreeView>
     );
 }

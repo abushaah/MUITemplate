@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Route } from 'react-router-dom';
-import routes from '../routes';
+import routes from '../../routes';
 
 export function createRoutes(config = routes){
     return config.map(({ name, path, Component, nestedRoutes }) => (
