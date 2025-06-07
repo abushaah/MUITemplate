@@ -6,13 +6,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { styled } from '@mui/material/styles';
 import PropTypes from 'prop-types';
-import NarbarTreeView from '../src/components/NavbarTreeView';
+import NavbarTreeView from '../src/components/NavbarTreeView';
 import routes from '../routes';
 
 const drawerWidth = 300;
 
 const AppBar = styled(DefaultAppBar, {
-    shoudForwardProp: (prop) => prop !== 'open',
+    shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
     transition: theme.transitions.create(['margin', 'width'], {
         easing: theme.transitions.easing.sharp,
@@ -110,7 +110,7 @@ export default function AppLayout({ children }) {
                     </IconButton>
                 </DrawerHeader>
                 <Divider />
-                <NarbarTreeView />
+                <NavbarTreeView />
             </Drawer>
             <Main open={open}>
                 <Toolbar />

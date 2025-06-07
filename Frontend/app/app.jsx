@@ -8,7 +8,7 @@ import AppLayout from './layout';
 import AppRoutes from './routes';
 import theme from '../theme';
 
-function App() {
+export default function App() {
     return (
         <React.StrictMode>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -25,5 +25,3 @@ function App() {
     </React.StrictMode>
     );
 }
-
-export default App;

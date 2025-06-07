@@ -1,4 +1,4 @@
-import AbcIcon from '@mui/icons-material/Abc';
+import HomeIcon from '@mui/icons-material/Home';
 import Home from './src/pages/Home';
 
 /**
@@ -18,7 +18,7 @@ export default [
     {
         path: '/',
         name: 'Home',
-        Icon: AbcIcon,
+        Icon: HomeIcon,
         Component: Home,
-    },
+    }
 ];

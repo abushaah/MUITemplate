@@ -51,8 +51,8 @@ function LinkedTreeItem(props) {
     } = props;
 
     const styleProps = {
-        'treeViewColor': theme.palette.mode !== 'dark' ? color : colorForDarkMode,
-        'treeViewBgColor': theme.palette.mode !== 'dark' ? bgColor : bgColorForDarkMode,
+        '--tree-view-color': theme.palette.mode !== 'dark' ? color : colorForDarkMode,
+        '--tree-view-bg-color': theme.palette.mode !== 'dark' ? bgColor : bgColorForDarkMode,
     };
 
     return (
