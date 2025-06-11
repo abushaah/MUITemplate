@@ -2,125 +2,165 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { styled, useTheme } from '@mui/material/styles';
 import { Box, Typography } from '@mui/material';
-import { SimpleTreeView, TreeItem, treeItemClasses } from '@mui/x-tree-view';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
+import {
+    TreeItemContent,
+    TreeItemIconContainer,
+    TreeItemRoot,
+    TreeItemGroupTransition,
+} from '@mui/x-tree-view/TreeItem';
+import { useTreeItem } from '@mui/x-tree-view/useTreeItem';
+import { TreeItemProvider } from '@mui/x-tree-view/TreeItemProvider';
+import { TreeItemIcon } from '@mui/x-tree-view/TreeItemIcon';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import PropTypes from 'prop-types';
 import routes from '../../routes';
 
-const LinkedTreeItemRoot = styled(TreeItem)(({ theme }) => ({
-    color: theme.palette.text.secondary,
-    margin: theme.spacing(1, 0),
-    [`& .${treeItemClasses.content}`]: {
-        color: theme.palette.text.secondary,
-        paddingRight: theme.spacing(1),
-        fontWeight: theme.typography.fontWeightMedium,
-        '&.Mui-expanded': {
-            fontWeight: theme.typography.fontWeightRegular
-        },
-        '&:hover': {
-            backgroundColor: theme.palette.action.hover,
-        },
-        '&.Mui-focused, &.Mui-selected, &.Mui-selected.Mui-focused' : {
-            backgroundColor: `var(--tree-view-bg-color, ${theme.palette.action.selected})`,
-            color: `var(--tree-view-color)`,
-        },
+const CustomTreeItemRoot = styled(TreeItemRoot)(({ theme, ownerState }) => ({
+    '--tree-view-color': ownerState.color,
+    '--tree-view-bg-color': ownerState.bgColor,
+    color: (theme.vars || theme).palette.text.secondary,
+    ...theme.applyStyles('dark', {
+        '--tree-view-color': ownerState.colorForDarkMode,
+        '--tree-view-bg-color': ownerState.bgColorForDarkMode,
+    }),
+}));
+
+const CustomTreeItemContent = styled(TreeItemContent)(({ theme }) => ({
+    marginBottom: theme.spacing(0.3),
+    color: (theme.vars || theme).palette.text.secondary,
+    borderRadius: theme.spacing(2),
+    paddingRight: theme.spacing(1),
+    paddingLeft: `calc(${theme.spacing(1)} + var(--TreeView-itemChildrenIndentation) * var(--TreeView-itemDepth))`,
+    fontWeight: theme.typography.fontWeightMedium,
+    '&[data-expanded]': {
+        fontWeight: theme.typography.fontWeightRegular,
     },
-    [`& .${treeItemClasses.group}`]: {
-        marginLeft: 0,
-        [`& .${treeItemClasses.content}`]: {
-            paddingLeft: theme.spacing(2),
-        },
+    '&:hover': {
+        backgroundColor: (theme.vars || theme).palette.action.hover,
+    },
+    '&[data-focused], &[data-selected], &[data-selected][data-focused]': {
+        backgroundColor: `var(--tree-view-bg-color, ${(theme.vars || theme).palette.action.selected})`,
+        color: 'var(--tree-view-color)',
     },
 }));
 
-function LinkedTreeItem(props) {
+const CustomTreeItemIconContainer = styled(TreeItemIconContainer)(({ theme }) => ({
+    marginRight: theme.spacing(1),
+}));
+
+const CustomTreeItem = React.forwardRef(function CustomTreeItem(props, ref) {
     const theme = useTheme ();
     const {
+        id,
+        itemId,
+        label,
+        disabled,
+        children,
         bgColor,
         color,
-        labelIcon,
+        labelIcon: LabelIcon,
         labelInfo,
-        labelText,
         colorForDarkMode,
         bgColorForDarkMode,
         to,
-        collapseIcon,
-        expandIcon,
         ...other
     } = props;
 
-    const styleProps = {
-        '--tree-view-color': theme.palette.mode !== 'dark' ? color : colorForDarkMode,
-        '--tree-view-bg-color': theme.palette.mode !== 'dark' ? bgColor : bgColorForDarkMode,
+    const {
+        getContextProviderProps,
+        getRootProps,
+        getContentProps,
+        getIconContainerProps,
+        getLabelProps,
+        getGroupTransitionProps,
+        status,
+    } = useTreeItem({ id, itemId, children, label, disabled, rootRef: ref });
+
+    const treeItemRootOwnerState = {
+        color,
+        bgColor,
+        colorForDarkMode,
+        bgColorForDarkMode,
     };
 
     return (
-        <LinkedTreeItemRoot
-            label={
-                <Link to={to} style={{ textDecoration: 'none' }}>
-                    <Box
-                        sx={{
+        <TreeItemProvider {...getContextProviderProps()}>
+            <CustomTreeItemRoot
+                {...getRootProps(other)}
+                ownerState={treeItemRootOwnerState}
+                {...other}
+            >
+                <CustomTreeItemContent {...getContentProps()}>
+                    <CustomTreeItemIconContainer {...getIconContainerProps()}>
+                        <TreeItemIcon status={status} />
+                    </CustomTreeItemIconContainer>
+                    <Link to={to} style={{ textDecoration: 'none' }}>                        
+                        <Box
+                            sx={{
                             display: 'flex',
+                            flexGrow: 1,
                             alignItems: 'center',
-                            p: 1,
+                            p: 0.5,
                             pr: 0,
-                        }}
-                    >
-                        <Box component={labelIcon} color={theme.palette.icons.main} sx={{ mr: 2 }} />
-                        <Typography variant="body2" sx={{ flexGrow: 1, color: theme.palette.navbar.main }}>
-                            {labelText}
-                        </Typography>
-                        <Typography variant="caption" color="inherit">
-                            {labelInfo}
-                        </Typography>
-                    </Box>
-                </Link>
-            }
-            style={styleProps}
-            {...other}
-        />
+                            }}
+                        >
+                        <Box component={LabelIcon} sx={{ mr: 1, color: theme.palette.navbar.main }} />
+                            <Typography
+                                {...getLabelProps({
+                                    variant: 'body2',
+                                    sx: { display: 'flex', fontWeight: 'inherit', flexGrow: 1, color: theme.palette.navbar.main, },
+                                })}
+                            />
+                            <Typography variant="caption" sx={{ color: theme.palette.navbar.main }}>
+                                {labelInfo}
+                            </Typography>
+                        </Box>
+                    </Link>
+                </CustomTreeItemContent>
+                {children && <TreeItemGroupTransition {...getGroupTransitionProps()} />}
+            </CustomTreeItemRoot>
+        </TreeItemProvider>
     );
+});
+
+function EndIcon() {
+    return <div style={{ width: 24 }} />;
 }
 
-LinkedTreeItem.propTypes = {
-    bgColor: PropTypes.string,
-    color: PropTypes.string,
-    labelIcon: PropTypes.object,
-    labelInfo: PropTypes.string,
-    labelText: PropTypes.string.isRequired,
-    colorForDarkMode: PropTypes.string,
-    bgColorForDarkMode: PropTypes.string,
-    to: PropTypes.string.isRequired,
-}
-
-export default function NavbarTreeView () {
+export default function NavbarTreeView() {
     const theme = useTheme();
     return (
         <SimpleTreeView
             aria-label="navbar"
             defaultExpandedItems={['3']}
             sx={{ overflowY: 'auto '}}
+            slots={{
+            expandIcon: ArrowRightIcon,
+            collapseIcon: ArrowDropDownIcon,
+            endIcon: EndIcon,
+            }}
+            itemChildrenIndentation={20}
         >
-            {routes.map(({ path, name, Icon, nestedRoutes }) => (
-                <LinkedTreeItem
-                    key={name}
-                    labelText={name}
+            {routes.map(({ path, name, Icon, nestedRoutes }, index) => (
+                <CustomTreeItem
+                    key={index + 1}
+                    itemId={name}
+                    label={name}
                     labelIcon={Icon}
                     to={path}
-                    collapseIcon={<ExpandMoreIcon style={{ fill: theme.palette.navbar.main }} />}
-                    expandIcon={<ChevronRightIcon style={{ fill: theme.palette.navbar.main }} />}
                 >
-                    {nestedRoutes?.map((nestedRoute) => (
-                        <LinkedTreeItem
-                            key={nestedRoute.name}
-                            labelText={nestedRoute.name}
+                    {nestedRoutes?.map((nestedRoute, nestedIndex) => (
+                        <CustomTreeItem
+                            key={routes.length + nestedIndex + 1}
+                            itemId={nestedRoute.name}
+                            label={nestedRoute.name}
                             labelIcon={nestedRoute.Icon}
                             to={nestedRoute.path}
-                            color="#5F249A"
                         />
                     ))}
-                </LinkedTreeItem>
+                </CustomTreeItem>
             ))}
         </SimpleTreeView>
     );
