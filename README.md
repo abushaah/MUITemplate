@@ -1,4 +1,4 @@
-# MUI & Vite.js Template
+# React Material UI & Vite.js Website Template
 
 Application template developed with Node.js, React Material UI & Vite.js, PostgreSQL, and Docker
 
