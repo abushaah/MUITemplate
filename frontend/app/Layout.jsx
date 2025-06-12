@@ -8,7 +8,7 @@ import { styled, useTheme } from '@mui/material/styles';
 import NavbarTreeView from '../src/components/NavbarTreeView';
 import routes from '../routes';
 
-// this page includes the bas layout of the side (navbar drawer on the left, title on top, and content)
+// this page includes the base layout of the side (navbar drawer on the left, title on top, and content)
 
 const drawerWidth = 300;
 

@@ -1,6 +1,6 @@
 # React Material UI & Vite.js Website Template
 
-Application template developed with Node.js, React Material UI & Vite.js, PostgreSQL, and Docker
+Full stack application template developed with Node.js, React Material UI & Vite.js, PostgreSQL, and Docker
 
 ## How to run
 
